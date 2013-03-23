@@ -31,4 +31,8 @@ You can create a sliding puzzle right now
     * puzzleShuffle : event fired when the puzzle is shuffled (when puzzle.shuffle called)
     * puzzleMove : event fired when an item of the puzzle is moved 
 
+## Requirements
+    * JQuery
+    * JQuery-ui
+
 ###Work in progress
