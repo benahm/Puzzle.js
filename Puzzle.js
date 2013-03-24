@@ -1,7 +1,6 @@
-
 var Puzzle;
 (function (Puzzle) {
-    var path = "Img/vampire.jpg";
+    var path = "images/vampire.jpg";
     var Point = (function () {
         function Point(x, y) {
             this.x = x;
