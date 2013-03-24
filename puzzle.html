@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Sliding Puzzle JavaScript App</title>
+    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet" />
+    <script src="javascripts/jquery-1.9.1.min.js"></script>
+    <script src="javascripts/jquery-ui-1.10.1.min.js"></script>
+    <script src="https://raw.github.com/benahm/Puzzle.js/master/Puzzle.js"></script>
+</head>
+<body>
+    <h1>Sliding Puzzle demo </h1>
+    <div class="container">
+    <button id="shuffle" class="btn btn-info">Shuffle</button>
+    <button id="solve" class="btn btn-info">Solve</button>
+    <div id="puzzle" style="border:2px;border-style:solid"></div>
+	<script>
+	$(document).ready(function () {
+    var puzzle = new Puzzle.SlidingPuzzle("#puzzle");
+    puzzle.display({
+        size: 3,
+        image: "images/vampire.jpg"
+    });
+    $("#shuffle").on("click", function () {
+        puzzle.shuffle();
+        $("#solve").attr("disabled", true);
+    });
+    $("#puzzle").on("puzzleShuffle", function () {
+        $("#solve").removeAttr("disabled");
+    });
+    $("#solve").on("click", function () {
+        puzzle.solve();
+    });
+});
+	</script>
+    </div>
+</body>
+</html>
