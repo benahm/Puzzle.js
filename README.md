@@ -35,4 +35,7 @@ You can create a sliding puzzle right now
     * JQuery
     * JQuery-ui
 
+
+[Demo](http://benahm.github.com/Puzzle.js/)
+
 ###Work in progress
