@@ -1,20 +1,4 @@
-$(document).ready(function () {
-    var puzzle = new Puzzle.SlidingPuzzle("#puzzle");
-    puzzle.display({
-        size: 3,
-        image: "Img/vampire.jpg"
-    });
-    $("#shuffle").on("click", function () {
-        puzzle.shuffle();
-        $("#solve").attr("disabled", true);
-    });
-    $("#puzzle").on("puzzleShuffle", function () {
-        $("#solve").removeAttr("disabled");
-    });
-    $("#solve").on("click", function () {
-        puzzle.solve();
-    });
-});
+
 var Puzzle;
 (function (Puzzle) {
     var path = "Img/vampire.jpg";
