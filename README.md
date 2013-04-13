@@ -9,14 +9,14 @@ You can create a sliding puzzle right now
 
     var puzzle=Puzzle.SlidingPuzzle("#puzzle");
      puzzle.display({ size: 3, image: "Img/vampire.jpg" });
-    $("#shuffle").on("click", () => {
+    $("#shuffle").on("click",function () {
         puzzle.shuffle();
         $("#solve").attr("disabled", true);
     });
-    $("#puzzle").on("puzzleShuffle", () => {
+    $("#puzzle").on("puzzleShuffle",function () {
         $("#solve").removeAttr("disabled");
     })
-    $("#solve").on("click", () => {
+    $("#solve").on("click",function () {
         puzzle.solve();
     });
 
