@@ -1,6 +1,8 @@
 Puzzle.js
 ================
-
+<p align="center">
+    <img alt="Sliding Puzzle" src="http://24.media.tumblr.com/tumblr_ma2679pvjo1r948g4o1_400.gif" />
+</p>
 Create puzzles using Puzzle.js
 
 You can create a sliding puzzle right now
@@ -36,6 +38,6 @@ You can create a sliding puzzle right now
     * JQuery-ui
 
 
-[Demo](http://benahm.github.com/Puzzle.js/)
+#[Live demo](http://benahm.github.com/Puzzle.js/)
 
 ###Work in progress
