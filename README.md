@@ -6,20 +6,20 @@ Puzzle.js
 Create puzzles using Puzzle.js
 
 You can create a sliding puzzle right now
-
-    var puzzle=Puzzle.SlidingPuzzle("#puzzle");
-     puzzle.display({ size: 3, image: "Img/vampire.jpg" });
-    $("#shuffle").on("click",function () {
-        puzzle.shuffle();
-        $("#solve").attr("disabled", true);
-    });
-    $("#puzzle").on("puzzleShuffle",function () {
-        $("#solve").removeAttr("disabled");
-    })
-    $("#solve").on("click",function () {
-        puzzle.solve();
-    });
-
+```javascript
+var puzzle=Puzzle.SlidingPuzzle("#puzzle");
+puzzle.display({ size: 3, image: "Img/vampire.jpg" });
+$("#shuffle").on("click",function () {
+    puzzle.shuffle();
+    $("#solve").attr("disabled", true);
+});
+$("#puzzle").on("puzzleShuffle",function () {
+    $("#solve").removeAttr("disabled");
+})
+$("#solve").on("click",function () {
+    puzzle.solve();
+});
+```
 ## Options 
     * size: size of the puzzle default 3
     * image: image url, default empty and shows numbers
