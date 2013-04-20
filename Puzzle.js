@@ -1,6 +1,6 @@
+
 var Puzzle;
 (function (Puzzle) {
-    var path = "images/vampire.jpg";
     var Point = (function () {
         function Point(x, y) {
             this.x = x;
@@ -52,7 +52,7 @@ var Puzzle;
             };
             myImage.src = path;
         };
-        ImageLoader.loadNumbers = function loadNumbers(display) {
+        ImageLoader.loadNumbers = function loadNumbers(path, display) {
             var myImage = new Image();
             myImage.name = path;
             var _this = this;
@@ -64,7 +64,7 @@ var Puzzle;
             };
             myImage.src = path;
         };
-        ImageLoader.loadNumbersWH = function loadNumbersWH(width, height, display) {
+        ImageLoader.loadNumbersWH = function loadNumbersWH(width, height, path, display) {
             var myImage = new Image();
             myImage.name = path;
             var _this = this;
@@ -93,7 +93,7 @@ var Puzzle;
                 $("#" + _this.itemId).fadeIn();
             });
         };
-        ItemPuzzle.prototype.display = function () {
+        ItemPuzzle.prototype.display = function (path) {
             this.xUnit = ImageLoader.imgWidth / this.size;
             this.yUnit = ImageLoader.imgHeight / this.size;
             var xPos = this.pos.getX() * this.xUnit;
@@ -179,29 +179,31 @@ var Puzzle;
         };
         Pz.prototype.solve = function () {
             var _this = this;
-            var parseName = function (name) {
-                return new Point(parseInt(name[11], 10), parseInt(name[13], 10));
-            };
-            var solved = function () {
-                _this.resetItemsId();
-                $(_this.id).trigger("puzzleAutoSolve");
-            };
-            for(var i = 0; i < this.options.size; i++) {
-                for(var j = 0; j < this.options.size; j++) {
-                    var p = new Point(i, j);
-                    var id = "#itemPuzzle_" + p.getX() + "_" + p.getY();
-                    var name = $(id).attr("name");
-                    if(name) {
-                        var to = parseName(name);
-                        if(i != this.options.size - 1 || j != this.options.size - 1) {
-                            this.moveItemTo(id, to);
-                        } else {
-                            this.moveItemTo(id, to);
+            if(!this.shuffler.isShuffling()) {
+                var parseName = function (name) {
+                    return new Point(parseInt(name[11], 10), parseInt(name[13], 10));
+                };
+                var solved = function () {
+                    _this.resetItemsId();
+                    $(_this.id).trigger("puzzleAutoSolve");
+                };
+                for(var i = 0; i < this.options.size; i++) {
+                    for(var j = 0; j < this.options.size; j++) {
+                        var p = new Point(i, j);
+                        var id = "#itemPuzzle_" + p.getX() + "_" + p.getY();
+                        var name = $(id).attr("name");
+                        if(name) {
+                            var to = parseName(name);
+                            if(i != this.options.size - 1 || j != this.options.size - 1) {
+                                this.moveItemTo(id, to);
+                            } else {
+                                this.moveItemTo(id, to);
+                            }
                         }
                     }
                 }
+                solved();
             }
-            solved();
         };
         Pz.prototype.resetItemsId = function () {
             for(var i = 0; i < this.options.size; i++) {
@@ -253,7 +255,7 @@ var Puzzle;
                 ImageLoader.load(this.options.width, this.options.height, this.options.image, function () {
                     _this.createItems();
                     for(var i = 0; i < _this.options.size * _this.options.size - 1; i++) {
-                        _this.puzzleItems[i].display();
+                        _this.puzzleItems[i].display(_this.options.image);
                     }
                     new dragManager(_this, _this.options.size).start();
                 });
@@ -261,7 +263,7 @@ var Puzzle;
                 ImageLoader.loadAndFitWindow(this.options.image, function () {
                     _this.createItems();
                     for(var i = 0; i < _this.options.size * _this.options.size - 1; i++) {
-                        _this.puzzleItems[i].display();
+                        _this.puzzleItems[i].display(_this.options.image);
                     }
                     new dragManager(_this, _this.options.size).start();
                 });
@@ -270,7 +272,7 @@ var Puzzle;
         Pz.prototype.displayNumbers = function () {
             var _this = this;
             if(this.options.width != 0 && this.options.height != 0) {
-                ImageLoader.loadNumbersWH(this.options.width, this.options.height, function () {
+                ImageLoader.loadNumbersWH(this.options.width, this.options.height, this.options.image, function () {
                     _this.createItems();
                     for(var i = 0; i < _this.options.size * _this.options.size - 1; i++) {
                         _this.puzzleItems[i].displayNumber();
@@ -278,7 +280,7 @@ var Puzzle;
                     new dragManager(_this, _this.options.size).start();
                 });
             } else {
-                ImageLoader.loadNumbers(function () {
+                ImageLoader.loadNumbers(this.options.image, function () {
                     _this.createItems();
                     for(var i = 0; i < _this.options.size * _this.options.size - 1; i++) {
                         _this.puzzleItems[i].displayNumber();
@@ -298,7 +300,7 @@ var Puzzle;
         Pz.prototype.displaySolved = function () {
             var missingItem = this.puzzleItems[this.options.size * this.options.size - 1];
             if(this.options.image) {
-                missingItem.display();
+                missingItem.display(this.options.image);
             } else {
                 missingItem.displayNumber();
             }
@@ -328,7 +330,6 @@ var Puzzle;
                 left: "+=" + direction.getX() * xUnit,
                 top: "+=" + direction.getY() * yUnit
             }, 80, function () {
-                console.log(nextmove());
                 nextmove();
             });
             $("#" + itemP).attr("id", "itemPuzzle_" + (p.getX() + direction.getX()) + "_" + (p.getY() + direction.getY()));
@@ -532,16 +533,19 @@ var Puzzle;
         function Shuffler(dimension, puzzle) {
             this.dimension = dimension;
             this.puzzle = puzzle;
+            this.shuffleHit = 0;
             this.lastDirection = new Point(0, 0);
             Pz.empty = new Point(dimension - 1, dimension - 1);
         }
         Shuffler.prototype.shuffle = function () {
             var _this = this;
             var i = 20;
+            this.shuffleHit++;
             var sh = function () {
                 if(i > 0) {
                     _this.doRandomMove(sh);
-                } else if(i == -20) {
+                } else if(i == 0) {
+                    _this.shuffleHit--;
                     $(_this.puzzle.getId()).trigger("puzzleShuffle");
                 }
                 i--;
@@ -585,6 +589,9 @@ var Puzzle;
                 return value.getX() != backDirection.getX() || value.getY() != backDirection.getY();
             });
             return directions;
+        };
+        Shuffler.prototype.isShuffling = function () {
+            return this.shuffleHit !== 0;
         };
         return Shuffler;
     })();    
