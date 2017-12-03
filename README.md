@@ -38,6 +38,5 @@ $("#solve").on("click",function () {
     * JQuery-ui
 
 
-#[Live demo](http://benahm.github.com/Puzzle.js/)
+## [Live demo](http://benahm.github.com/Puzzle.js/)
 
-###Work in progress
